@@ -1,0 +1,15 @@
+.followers-container{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #FAFBFC;
+}
+.followers-wrapper{
+    display: flex;
+    width: 50%;
+    margin-bottom: 4%; 
+}
+.follower-name{
+    color:#0D66D6 !important;
+    font-size: 18px !important;
+    font-weight: bold;
+}

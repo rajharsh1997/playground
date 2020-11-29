@@ -1,0 +1,50 @@
+.card {
+  /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #fff; */
+}
+.btn-container {
+  height: 30px;
+  position: relative;
+  height: 30px;
+  position: relative;
+  margin-left: 12%;
+}
+.btn-follow {
+  width: 100px !important;
+}
+.btn-follow-center {
+  padding: 8px 22px 0px 0px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.container {
+  margin-top: 10px;
+  padding: 2px 16px;
+}
+.error {
+  margin-top: 20%;
+}
+.img-wrapper {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+.user-info{
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-left: 40%;
+}
+.text-info{
+    margin-left:20px;
+}
