@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Purpose
+
+This app can be used to list github repositories of users along with their information
+
 ## Available Scripts
 
 In the project directory, you can run:
