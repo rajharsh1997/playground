@@ -42,7 +42,7 @@ function onGoBack(){
                         {showDetails? 
                         <div>
                             {Object.keys(userInfo).length === 0 || userInfo.message === 'Not Found'? <div className="error">Username does not exist.Please type a a valid username.</div>: <UserInfo userinfo={userInfo} />}
-                    </div>:''}  
+                        </div>:'No Value'}  
          
           </div>
         )
