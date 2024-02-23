@@ -26,7 +26,6 @@ export async function getUserInfo(username) {
 
   export async function followersInfo(follower_url) {
     const url = follower_url;
-    console.log(url);
       return fetch(url, {
       method: 'GET',
       headers: new Headers({
