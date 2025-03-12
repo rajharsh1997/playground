@@ -10,9 +10,8 @@ on:
         options:
           - dev
           - stage
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - 'CHANGELOG.md'
 
@@ -40,17 +39,28 @@ jobs:
       - name: Check if CHANGELOG.md is modified
         id: check_changelog
         run: |
-          # Fetch all branches to ensure we have the latest `main` reference
-          git fetch --all
-          git diff --name-only origin/main...$GITHUB_SHA
-      
-          # Compare the latest commit on `main` (origin/main) with the current commit ($GITHUB_SHA)
-          if git diff --name-only origin/main...$GITHUB_SHA | grep -q 'CHANGELOG.md'; then
-            echo "CHANGELOG.md was modified."
-            echo "changed=true" >> $GITHUB_ENV
+          # If it's a PR, check the files changed in the PR
+          if [[ $GITHUB_EVENT_NAME == "pull_request" ]]; then
+            echo "This is a pull request."
+            files_changed=$(jq -r '.pull_request.changed_files' <<< "${{ github.event }}")
+            if [[ "$files_changed" == *"CHANGELOG.md"* ]]; then
+              echo "CHANGELOG.md was modified in this PR."
+              echo "changed=true" >> $GITHUB_OUTPUT
+            else
+              echo "CHANGELOG.md was not modified in this PR."
+              echo "changed=false" >> $GITHUB_OUTPUT
+            fi
           else
-            echo "CHANGELOG.md was not modified."
-            echo "changed=false" >> $GITHUB_ENV
+            # If it's a direct push to main, check if CHANGELOG.md is in the diff
+            echo "This is a direct push to main."
+            git fetch --all  # Fetch all branches
+            if git diff --name-only origin/main...$GITHUB_SHA | grep -q 'CHANGELOG.md'; then
+              echo "CHANGELOG.md was modified."
+              echo "changed=true" >> $GITHUB_OUTPUT
+            else
+              echo "CHANGELOG.md was not modified."
+              echo "changed=false" >> $GITHUB_OUTPUT
+            fi
           fi
         
   #The below job ensures that sonar dashboard has a new analysis based on main branch with the new version
