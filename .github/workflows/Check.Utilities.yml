@@ -38,11 +38,12 @@ jobs:
       - name: Check if CHANGELOG.md is modified
         id: check_changelog
         run: |
-          # Fetch the latest main branch commit
-          git fetch origin main
+          # Fetch all branches to ensure we have the latest `main` reference
+          git fetch --all
+          git diff --name-only origin/main...$GITHUB_SHA
       
-          # Compare the current commit with the latest commit on the main branch
-          if git diff --name-only origin/main $GITHUB_SHA | grep -q 'CHANGELOG.md'; then
+          # Compare the latest commit on `main` (origin/main) with the current commit ($GITHUB_SHA)
+          if git diff --name-only origin/main...$GITHUB_SHA | grep -q 'CHANGELOG.md'; then
             echo "CHANGELOG.md was modified."
             echo "changed=true" >> $GITHUB_ENV
           else
