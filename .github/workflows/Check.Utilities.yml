@@ -36,32 +36,6 @@ jobs:
              
       - name: Preview outputs                             
         run: echo "$Hello World"
-
-      - name: Check if CHANGELOG.md is modified
-        id: check_changelog
-        run: |
-          if [[ $GITHUB_EVENT_NAME == "pull_request" ]]; then
-            # In a PR event, check if CHANGELOG.md is one of the changed files
-            echo "This is a pull request."
-            if [[ $(jq -r '.pull_request.files[] | select(.filename=="CHANGELOG.md")' <<< "${{ toJson(github.event) }}") ]]; then
-              echo "CHANGELOG.md was modified in this PR."
-              echo "changed=true" >> $GITHUB_OUTPUT
-            else
-              echo "CHANGELOG.md was not modified in this PR."
-              echo "changed=false" >> $GITHUB_OUTPUT
-            fi
-          else
-            # In a push event, check if CHANGELOG.md is in the git diff
-            echo "This is a direct push to main."
-            git fetch --all  # Fetch all branches
-            if git diff --name-only origin/main...$GITHUB_SHA | grep -q 'CHANGELOG.md'; then
-              echo "CHANGELOG.md was modified."
-              echo "changed=true" >> $GITHUB_OUTPUT
-            else
-              echo "CHANGELOG.md was not modified."
-              echo "changed=false" >> $GITHUB_OUTPUT
-            fi
-          fi
         
   #The below job ensures that sonar dashboard has a new analysis based on main branch with the new version
   sonar-qube:
