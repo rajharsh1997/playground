@@ -10,8 +10,7 @@ on:
         options:
           - dev
           - stage
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - main
     paths:
@@ -70,5 +69,5 @@ jobs:
     needs: set-vars
     steps:
       - name: Sonar
-        if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch' 
+        if: contains(github.event.head_commit.message, 'Merge pull request') || github.event_name == 'workflow_dispatch' 
         run: echo "$Hello World"
