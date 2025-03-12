@@ -39,11 +39,10 @@ jobs:
       - name: Check if CHANGELOG.md is modified
         id: check_changelog
         run: |
-          # If it's a PR, check the files changed in the PR
           if [[ $GITHUB_EVENT_NAME == "pull_request" ]]; then
+            # In a PR event, check if CHANGELOG.md is one of the changed files
             echo "This is a pull request."
-            files_changed=$(jq -r '.pull_request.changed_files' <<< "${{ github.event }}")
-            if [[ "$files_changed" == *"CHANGELOG.md"* ]]; then
+            if [[ $(jq -r '.pull_request.files[] | select(.filename=="CHANGELOG.md")' <<< "${{ toJson(github.event) }}") ]]; then
               echo "CHANGELOG.md was modified in this PR."
               echo "changed=true" >> $GITHUB_OUTPUT
             else
@@ -51,7 +50,7 @@ jobs:
               echo "changed=false" >> $GITHUB_OUTPUT
             fi
           else
-            # If it's a direct push to main, check if CHANGELOG.md is in the diff
+            # In a push event, check if CHANGELOG.md is in the git diff
             echo "This is a direct push to main."
             git fetch --all  # Fetch all branches
             if git diff --name-only origin/main...$GITHUB_SHA | grep -q 'CHANGELOG.md'; then
